@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_migrate_contact,migrate_contact,model_import_partner_info,sb_migration_info.access_migrate_info,1,1,1,1
+access_migration_message_wizard,migration_message_wizard,model_migration_message_wizard,sb_migration_info.access_migrate_info,1,1,1,1

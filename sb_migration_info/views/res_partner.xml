@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="res_partner_import_info_wizard_form_view" model="ir.ui.view">
+            <field name="name">res.partner.import.info.form</field>
+            <field name="model">import.partner.info</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Res Partner Info Import">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="row">
+                            <label for="file" class="col-md-5 o_form_label o_light_label border-right"/>
+                            <span class="col-md-5"><field name="file"/></span>
+                        </div>
+                        <div class="row">
+                            <label for="model" class="col-md-5 o_form_label o_light_label border-right"/>
+                            <span class="col-md-5"><field name="model"/></span>
+                        </div>
+                    </div>
+                    <footer>
+                        <button class="oe_highlight rounded" string="Cargar" name="import_file_csv_xlsx" type="object"/> 
+                        <button class="oe_link" string="Cancelar" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="res_partner_import_info_action" model="ir.actions.act_window">
+            <field name="name">Importar contactos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">import.partner.info</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem   name="Importar contactos" 
+                    id="menu_import_contact_info"  
+                    parent="contacts.menu_contacts"
+                    action="res_partner_import_info_action"
+                    sequence="3"/>
+    </data>
+</odoo>

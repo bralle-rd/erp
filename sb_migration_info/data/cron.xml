@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- <record id="ir_cron_import_partner_file" model="ir.cron">
+        <field name="name">Cron Importar Partner por Lote</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">6</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="state">code</field>
+        <field name="code">model.import_partner_ckunk()</field>
+        <field eval="False" name="doall"/>
+        <field name="priority">1000</field>
+    </record> -->
+
+    <record id="ir_cron_import_product_file" model="ir.cron">
+        <field name="name">Cron Importar Producto por Lote</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">4</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="state">code</field>
+        <field name="code">model.import_product_template_chunk()</field>
+        <field eval="False" name="doall"/>
+        <field name="priority">1000</field>
+    </record>
+
+</odoo>

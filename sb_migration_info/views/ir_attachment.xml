@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_state_attachment_form" model="ir.ui.view">
+        <field name="name">state.attachment.form</field>
+        <field name="model">ir.attachment</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.view_attachment_form"/>
+        <field name="arch" type="xml">
+            <field name="mimetype" position="after">
+                <field name="state" string="Estatus" />
+            </field>
+        </field>
+    </record>
+
+    
+    <record id="view_attachment_search" model="ir.ui.view">
+        <field name="name">view.attachment.search</field>
+        <field name="model">ir.attachment</field>
+        <field name="inherit_id" ref="base.view_attachment_search" />
+        <field name="arch" type="xml">
+            <xpath expr="//search/group" position="inside">
+                <field name="state"/>
+                <filter
+                    name="state_file_processing"
+                    string="Lotes pendientes por procesar"
+                    domain="[('state', '=', 'processing')]"
+                />
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>
