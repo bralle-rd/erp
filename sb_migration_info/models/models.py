@@ -31,7 +31,7 @@ class ResPartnerInfoImportWizard(models.TransientModel):
     def import_file_csv_xlsx(self):
         """ Function to import product or update from csv or xlsx file """
         
-        row_size = 2001
+        row_size = 2000
         warn_msg = ''
         #Read file type .csv
         if self.option == 'csv':
@@ -47,7 +47,6 @@ class ResPartnerInfoImportWizard(models.TransientModel):
 
 
             number_lines = sum(1 for row in file_reader)
-            print("number_lines:", number_lines)
             if number_lines > row_size:
                 #Split file 
                 res = self.split_xlsx_or_csv(self.option, self.file, row_size)
@@ -163,48 +162,50 @@ class ResPartnerInfoImportWizard(models.TransientModel):
                 l10n_mx_edi_locality = row[8].strip() #Localidad
                 city_id = row[9].strip() #Municipio
                 state_id = row[10].strip() #Estado
-                country_id = row[11].strip() #País
-                phone = row[12].strip() #Teléfono
-                website = row[13].strip() #Página web
-                l10n_mx_edi_curp = row[14].strip()#Curp
-                email = row[15].strip()#Correo electrónico
-                con_credito = row[16].strip()#Con crédito
-                dias_credito = row[17].strip()#Días de crédito
-                credit_limit = row[18].strip()#Límite de crédito
-                user_id = row[19].strip()#Vendedor
-                methodo_pago = row[22].strip()#Método de pago
-                uso_cfdi = row[23].strip()#Uso de cfdi< czavsfegtjhjbga
-                forma_pago = row[25].strip()#Forma de pago
-                property_account_position_id = row[26].strip()#Registro fiscal
-                nombre_comercial = row[27].strip()#Nombre comercial
-                search_city = None
+                country_id = row[12].strip() #País
+                phone = row[13].strip() #Teléfono
                 
+                website = row[15].strip() #Página web
+                l10n_mx_edi_curp = row[16].strip()#Curp
+                
+                email = row[27].strip()#Correo electrónico
+                con_credito = row[17].strip()#Con crédito
+                dias_credito = row[18].strip()#Días de crédito
+                credit_limit = row[19].strip()#Límite de crédito
+                tip_tercero = row[20].strip()#
+                tip_opera = row[21].strip()#
+                forma_pago = row[22].strip()#Forma de pago
+                bank_id = row[23].strip()#Banco
+                sucursal_bank = row[24].strip()#Sucursal del banco
+                account_bank = row[25].strip()#Número de cuenta de banco
+                clabe_bank = row[26].strip()#Clabe de banco
+                property_account_position_id = row[28].strip()#Registro fiscal
+                
+                search_city = None
                 
                 # #########Buscar ciudad
                 if city_id:
                     #Buscar estado 
                     search_city = self.env['res.city'].search([('name', '=', city_id)], limit=1).id
-                    # print("Ciudad encontrado=", search_city)
+                    print("Ciudad encontrado=", search_city)
                     if not search_city:
                         search_city_id = self.env['res.city'].sudo().create({
-                            'name': city_id, 
+                            'name': city_id.lower(), 
                             'state_id': self.env['res.country.state'].search([('name', '=', state_id)], limit=1).id if state_id else None,
                             'country_id': self.env['res.country'].search([('name', '=', country_id)], limit=1).id if country_id else 156})
                         search_city = search_city_id.id
-                        # print("Información de ciudad creada=", search_city)
+                        print("Información de ciudad creada=", search_city)
     
-              
+                
                 ###########Buscar cliente/proveedor
                 search_partner = self.env['res.partner'].search([('name', '=', name.upper())], limit=1) 
-                # print("search_partner: ", search_partner)
-                _logger.info("Forma de pago= %s", forma_pago)
+                print("search_partner: ", search_partner)
                 
                 if not search_partner:
                     info_partner = {
                         'ref': ref, 
                         'company_type': 'person' if len(vat) == 13 else 'company',
                         'name': name,
-                        'nombre_comercial': nombre_comercial,
                         'vat': vat,
                         'street_name': street,
                         'street_number2': street_number2, 
@@ -222,16 +223,28 @@ class ResPartnerInfoImportWizard(models.TransientModel):
                         'con_credito': con_credito,
                         'dias_credito': dias_credito,
                         'credit_limit': credit_limit,
-                        #'user_id': 
-                        'methodo_pago': methodo_pago.upper() if methodo_pago else None,
-                        'uso_cfdi': uso_cfdi,
+                        # 'tip_tercero': tip_tercero,
+                        'l10n_mx_type_of_operation': tip_opera if tip_opera else None, #self.env['res.partner.industry'].search([('name', '=', tip_opera)], limit=1).id if tip_opera else None,
                         'forma_pago': forma_pago,
                         'property_account_position_id': property_account_position_id,
-                        'customer_rank': 1,
+                        'supplier_rank': 1,
                         'lang': 'es_MX'
                     }
                     _logger.info("Crear partner= %s", info_partner)
-                    self.env['res.partner'].sudo().create(info_partner)
+                    partner_id = self.env['res.partner'].sudo().create(info_partner)
+                    
+                    # if bank_id:
+                    #     partner_id.write({
+                    #         'bank_ids': [(0,0, {
+                    #             'bank_id': self.env['res.bank'].search([('name', '=', bank_id)], limit=1).id if bank_id else None,
+                    #             'sucursal': sucursal_bank,
+                    #             'acc_number': account_bank,
+                    #             'l10n_mx_edi_clabe': clabe_bank
+                    #         })]
+                    #     })
+                    # else:
+                    #     pass
+                    
                 else:
                     pass
                 
@@ -323,6 +336,7 @@ class ResPartnerInfoImportWizard(models.TransientModel):
                     }
                     _logger.info("Actualizar producto= %s", info_product)
         return True
+
 
 
 
