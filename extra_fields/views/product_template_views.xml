@@ -8,7 +8,7 @@
         <field name="uom_po_id" position="after">
           <field name="muestra" />
           <field name="campo_libre" />
-          <field name="utilidad" widget="percentage"/>
+          <field name="utilidad"/> <!-- widget="percentage"-->
         </field>
       </field>
     </record>
