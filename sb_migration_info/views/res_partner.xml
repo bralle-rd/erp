@@ -11,8 +11,7 @@
                         <div class="row">
                             <label for="file" class="col-md-5 o_form_label o_light_label border-right"/>
                             <span class="col-md-5"><field name="file"/></span>
-                        </div>
-                        <div class="row">
+
                             <label for="model" class="col-md-5 o_form_label o_light_label border-right"/>
                             <span class="col-md-5"><field name="model"/></span>
                         </div>
